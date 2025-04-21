@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogPost from '../../components/BlogPost.astro';
+
+export async function getStaticPaths() {
+  const allPosts = await Astro.glob('../posts/*.md');
+
+  const uniqueTags = [...new Set(allPosts.map((post) => post.frontmatter.tags).flat())];
+  //allPosts.map((post) => post.frontmatter.tags
+  // 各記事からtagsを取り出し
+  // flat()で1次元配列にする
+  // Setで重複を排除
+  // [...new Set()]で配列に戻す
+  // これで、../posts/*.mdの中にあるタグを全て取得できる
+
+  return uniqueTags.map((tag) => {
+    const filteredPosts = allPosts.filter((post) => post.frontmatter.tags.includes(tag));
+    return{
+    params: { tag },
+    props: { posts: filteredPosts},
+    }; 
+  });
+    // 取得したすべてのタグをループ
+    // allPostsの中から、tagが含まれているものをフィルタリングしてそのタグが付いた記事を取得
+    // post.frontmatter.tagsは配列なので、includes()で判定
+    // 取得した記事をfilteredPostsに格納
+    // paramsにtagを格納
+    // propsにfilteredPostsを格納
+    // これで、各タグに対して、そのタグが付いた記事を取得できる
+    // これをreturnすることで、各タグに対して、そのタグが付いた記事を取得できる
+
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+<BaseLayout pageTitle={tag}>
+  <p>{tag}のタグが付いた記事</p>
+  <ul>
+    {posts.map((post) => <BlogPost url={post.url} title={post.frontmatter.title} author={post.frontmatter.author} />)}
+  </ul>
+</BaseLayout>
