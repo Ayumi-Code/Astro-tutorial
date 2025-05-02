@@ -1,12 +1,12 @@
 html {
   background-color: #f1f5f9;
-  background-color:rgb(249, 249, 241);
+  background-color:rgb(249, 243, 241);
   font-family: sans-serif;
 }
 
 html.dark {
   background-color: #0d0950;
-  background-color:rgb(74, 73, 67);
+  background-color:rgb(93, 82, 77);
   color: #fff;
 }
 
